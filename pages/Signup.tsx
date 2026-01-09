@@ -6,8 +6,6 @@ import { UserProfile, UserStatus } from '../types';
 import { Lock, User, Phone, Calendar, Ruler, Weight, Heart, X, Sparkles } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 interface SignupProps {
   onSignup: (user: UserProfile) => void;
 }
@@ -42,6 +40,7 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
     ];
 
     try {
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: prompts[currentStep],
@@ -66,7 +65,8 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
     try {
       const res = await fsAddDoc("users", {
         ...formData,
-        isAdmin: false
+        isAdmin: false,
+        password: formData.password
       });
       onSignup({ ...formData, id: res.id } as UserProfile);
     } catch (err) {

@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      // منع انهيار التطبيق بسبب process.env في المتصفح
+      window.process = { env: { API_KEY: "" } };
+    </script>
     <style>
       body {
         font-family: 'Tajawal', sans-serif;
@@ -31,6 +35,13 @@
         background: #f9a8d4;
         border-radius: 10px;
       }
+      .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
     </style>
   <script type="importmap">
 {
@@ -48,5 +59,7 @@
 </head>
   <body>
     <div id="root"></div>
+    <!-- ربط ملف البداية لضمان عمل التطبيق -->
+    <script type="module" src="index.tsx"></script>
   </body>
 </html>

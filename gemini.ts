@@ -2,9 +2,14 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { UserProfile } from "./types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// دالة مساعدة لإنشاء كائن الـ AI بأمان
+const getAI = () => {
+  const apiKey = process.env.API_KEY || "";
+  return new GoogleGenAI({ apiKey });
+};
 
 export const getSmartGreeting = async (user: UserProfile) => {
+  const ai = getAI();
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: `أنت مساعد في تطبيق "نست جيرل" للمرأة. ولدينا مستخدمة اسمها ${user.name} وحالتها هي ${user.status}. قم بتوليد رسالة ترحيبية قصيرة دافئة ومخصصة لها ولحالتها باللغة العربية بأسلوب راقٍ.`,
@@ -13,6 +18,7 @@ export const getSmartGreeting = async (user: UserProfile) => {
 };
 
 export const getPeriodAdvice = async (user: UserProfile) => {
+  const ai = getAI();
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: `بناءً على بيانات المستخدمة: الاسم: ${user.name}، الحالة: ${user.status}، الوزن: ${user.weight}، هل تأتيها الدورة: ${user.hasPeriod ? 'نعم' : 'لا'}.
@@ -22,6 +28,7 @@ export const getPeriodAdvice = async (user: UserProfile) => {
 };
 
 export const chatWithPsych = async (user: UserProfile, message: string, history: any[]) => {
+  const ai = getAI();
   const systemInstruction = `أنت "نست"، الصديقة المقربة والمستشارة النفسية للمستخدمة. اسم المستخدمة هو ${user.name} وحالتها الاجتماعية ${user.status}.
 تحدثي معها بلهجة عامية دافئة، كوني مستمعة جيدة، قدمي دعماً نفسياً، واسمعي لمشاكلها واقترحي حلولاً بسيطة وداعمة. حافظي على خصوصيتها كأنك أعز صديقاتها.
 استخدمي رموز تعبيرية (Emojis) مناسبة لتكون المحادثة لطيفة.`;
@@ -37,6 +44,7 @@ export const chatWithPsych = async (user: UserProfile, message: string, history:
 };
 
 export const generateMealPlan = async (user: UserProfile, goal: string) => {
+  const ai = getAI();
   const response = await ai.models.generateContent({
     model: 'gemini-3-pro-preview',
     contents: `أنشئ جدولاً غذائياً أسبوعياً (7 أيام) للمستخدمة التالية:
